@@ -12,46 +12,105 @@ sourceText = readSource.read()
 sourceText = re.sub("[{}]", "", sourceText)
 sourceLines = sourceText.split("\n")
 
-# ZIP CODE FILE
-readZIP = open(sys.argv[3])
-ZIPText = readZIP.read()
-ZIPLines = ZIPText.split("\n")
+# # ZIP CODE FILE
+# readZIP = open(sys.argv[3])
+# ZIPText = readZIP.read()
+# ZIPLines = ZIPText.split("\n")
 
+# COORDINATES FILE
+readCOORD = open(sys.argv[4])
+COORDText = readCOORD.read()
+COORDLines = COORDText.split("\n")
 
 print("READ FILES")
 
 
+# # --------------------------------------
+# # CREATE ZIP CODE DICTIONARY
+# # --------------------------------------
+#
+# # Dictionary for zip codes : 'city, state'
+# zipdict = {}
+# # List of zip codes
+# allzips = []
+# # List of all State names
+# allstatenames = []
+#
+# # BUILD ZIP CODE DICTIONARY
+# for line in ZIPLines:
+#     if line != '':
+#         parts = line.split(",")
+#
+#         zipcode = str(parts[0])
+#         cityname = parts[1]
+#         stateabbrv = parts[3]
+#
+#         if zipcode not in zipdict:
+#             zipdict[zipcode] = [cityname + ", " + stateabbrv]
+#             allzips.append(zipcode)
+#         else:
+#             zipdict[zipcode].append(cityname + ", " + stateabbrv)
+#
+#         if stateabbrv not in allstatenames:
+#             allstatenames.append(stateabbrv)
+#
+#
+# print("BUILD ZIP DICT")
+
+
 # --------------------------------------
-# CREATE ZIP CODE DICTIONARY
+# CREATE COORDINATES DICTIONARY
 # --------------------------------------
 
-# Dictionary for zip codes : 'city, state'
-zipdict = {}
+# Dictionary for metro areas name : index
+coorddict = {}
 # List of zip codes
-allzips = []
+allcoords = []
+# List of lat ranges
+lats = []
+# list of longi ranges
+longi = []
 # List of all State names
-allstatenames = []
+metronames = []
+# LATITUDE OR LONGITUDE VALUES STATE MANAGER
+values = ""
+
+
 
 # BUILD ZIP CODE DICTIONARY
-for line in ZIPLines:
+for line in COORDLines:
     if line != '':
-        parts = line.split(",")
-
-        zipcode = str(parts[0])
-        cityname = parts[1]
-        stateabbrv = parts[3]
-
-        if zipcode not in zipdict:
-            zipdict[zipcode] = [cityname + ", " + stateabbrv]
-            allzips.append(zipcode)
+        if line[0] == "/":
+            values = line
         else:
-            zipdict[zipcode].append(cityname + ", " + stateabbrv)
+            parts = line.split("\t")
 
-        if stateabbrv not in allstatenames:
-            allstatenames.append(stateabbrv)
+            metro = str(parts[0])
+            low = float(parts[1])
+            high = float(parts[2])
+
+            if values == "/coordinates":
+                coorddict[metro] = len(metronames)
+                metronames.append(metro)
+            elif values == "/latitude":
+                index = coorddict[metro]
+                lats[index] = [low, high]
+            elif values == "/longitude":
+                index = coorddict[metro]
+                longi[index] = [low, high]
+
+            while len(lats) < len(metronames):
+                lats.append(None)
+                longi.append(None)
 
 
-print("BUILD ZIP DICT")
+print("BUILD COORD DICT")
+
+count = 0
+
+for name in metronames:
+    print(name, lats[count], longi[count])
+    count += 1
 
 
 
@@ -59,54 +118,64 @@ print("BUILD ZIP DICT")
 # BUSINESS LOCATIONS
 # --------------------------------------
 
-cities = {}
-cityLines = []
-names = []
-states = {}
-statenames = []
+# array of strings to be printed to each FILE
+printme = [[]] * len(metronames)
 
-usastates = []
-notstates = []
+# String for printing business with no area
+noarea = []
 
+# string for printing businesses with more than one area
+morearea = []
 
 for line in sourceLines:
     if line != '':
+
+# Split Json line into valuable data chunks
         line = re.sub("\": \"", "\t", line)
         parts = line.split("\", \"")
+        secondparts = parts[7].split(",")
         count = 0
-        # while count < 7:
-        #     print(count, parts[count])
-        #     count += 1
 
+        idParts = parts[0].split("\t")
+        nameParts = parts[1].split("\t")
         cityParts = parts[4].split("\t")
         stateParts = parts[5].split("\t")
-        idParts = parts[0].split("\t")
         postalParts = parts[6].split("\t")
+        latparts = secondparts[0].split(": ")
+        longparts = secondparts[1].split(": ")
 
+        # for part in parts:
+        #     print(part)
+# Useful Location Variables from Json Line
+        business_id = idParts[1]
+        # name
+        # neighborhood
+        # address
+        city = cityParts[1]
+        # state
+        # postal_code
+        latitude = float(latparts[1])
+        longitude = float(longparts[1])
 
-        loc = cityParts[1] + ", " + stateParts[1]
-        # if loc not in cities:
-        #     cities[loc] = len(cityLines)
-        #     cityLines.append("\n" + loc + "\t" + idParts[1] + "\n")
-        #     # names.append(loc)
-        # else:
-        #     cityLines[cities[loc]] += loc + "\t" + idParts[1] + "\n"
+        printstring = business_id + "\t" + city + "\t" + str(latitude) + "\t" + str(longitude)
 
-        if stateParts[1] not in allstatenames:
-            if stateParts[1] not in notstates:
-                states[stateParts[1]] = [cityParts[1] + "\t" + idParts[1]]
-                notstates.append(stateParts[1])
-            else:
-                states[stateParts[1]].append(cityParts[1] + "\t" + idParts[1])
-        else:
-            if stateParts[1] not in usastates:
-                states[stateParts[1]] = [cityParts[1] + "\t" + idParts[1]]
-                usastates.append(stateParts[1])
-            else:
-                states[stateParts[1]].append(cityParts[1] + "\t" + idParts[1])
+        areacount = 0
+        for name in metronames:
+            index = coorddict[name]
 
-        if stateParts[1] not in statenames:
-            statenames.append(stateParts[1])
+            print(name, index)
+
+            if latitude > lats[index][0] and latitude < lats[index][1] and longitude > longi[index][0] and longitude > longi[index][1]:
+                printme[index].append(printstring + "\n")
+                print("WINNER", name, printstring)
+                areacount += 1
+
+        if areacount == 0:
+            noarea.append(printstring + "\n")
+        elif areacount > 1:
+            morearea.append(printstring + "\n")
+
+        # print(business_id, city, latitude, longitude)
 
 
 print("BUILD BUSINESS DICT")
@@ -118,29 +187,23 @@ print("BUILD BUSINESS DICT")
 # PRINT SHOP
 # --------------------------------------
 
+printcount = 0
 
-# write = open(sys.argv[2], "w+")
+for target in printme:
+    writefile = open("AREABUS/METRO_" + metronames[printcount], "w+")
+    print(target, "TARG")
+    for line in target:
+        if line != '':
+            writefile.write(line)
+            print(line, "LINE IN TARG")
+    printcount += 1
 
-for name in usastates:
-    print(name)
+writefile = open("AREABUS/METRO_NO_AREA", "w+")
+for line in noarea:
+    writefile.write(line)
+    print(line, "NO")
 
-    write = open(sys.argv[2] + "/USA/LOCS_" + name, "w+")
-    cityNames = states[name]
-    for place in cityNames:
-        write.write(name + "\t" + place + "\n")
-
-for name in notstates:
-    print(name)
-
-    write = open(sys.argv[2] + "/NOT/LOCS_" + name, "w+")
-    cityNames = states[name]
-    for place in cityNames:
-        write.write(name + "\t" + place + "\n")
-#
-# write.write("LOCATION\tBUS ID\n")
-#
-# for line in cityLines:
-#     write.write(line)
-
-# for line in names:
-#     print(line)
+writefile = open("AREABUS/METRO_MORE_AREA", "w+")
+for line in morearea:
+    writefile.write(line)
+    print(line, "MORE")
