@@ -24,17 +24,17 @@ It's still a secret ;)
 
 ## Metropolitan Areas
 
-Champaign	 
-Charlotte	35.227087, -80.843127
-Cleveland	
-Las Vegas	
-Madison	
-Phoenix	
-Pittsburgh	
-Montreal	
-Toronto	
-Buenos Aires	
-Germand	
-United Kingdom	
+Champaign 40.116420, -88.243383  
+Charlotte	35.227087, -80.843127  
+Cleveland 41.499320, -81.694361  
+Las Vegas 36.169941, -115.13983  
+Madison 43.073052, -89.40123  
+Phoenix 33.448377, -112.074037  
+Pittsburgh  40.440625, -79.995886  
+Montreal  45.501689, -73.567256  
+Toronto 43.653226, -79.383184  
+Buenos Aires  -34.603684, -58.381559  
+Germany 51.165691, 10.451526  
+United Kingdom  55.378051, -3.435973  
 
 https://www.latlong.net/
