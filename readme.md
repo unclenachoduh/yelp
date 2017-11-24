@@ -24,7 +24,7 @@ It's still a secret ;)
 
 ## Metropolitan Areas
 
-Champaign	
+Champaign	 
 Charlotte	35.227087, -80.843127
 Cleveland	
 Las Vegas	
