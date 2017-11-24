@@ -2,6 +2,10 @@
 
 Kekoa Riggin - University of Washington - MSc Computational Linguistics
 
+## Project
+
+https://www.yelp.com/dataset
+
 ## Project Scope
 
 It's still a secret ;)
@@ -32,3 +36,5 @@ Toronto
 Buenos Aires	
 Germand	
 United Kingdom	
+
+https://www.latlong.net/
