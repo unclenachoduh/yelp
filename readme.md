@@ -17,3 +17,18 @@ It's still a secret ;)
 - [ ] Generate from model
 - [ ] Analyze generation
 - [ ] Generate on region
+
+## Metropolitan Areas
+
+Champaign	
+Charlotte	35.227087, -80.843127
+Cleveland	
+Las Vegas	
+Madison	
+Phoenix	
+Pittsburgh	
+Montreal	
+Toronto	
+Buenos Aires	
+Germand	
+United Kingdom	
