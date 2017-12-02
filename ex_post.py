@@ -1,3 +1,7 @@
+##
+# Separate the yelp data by postal code
+##
+
 import sys
 import re
 
@@ -23,19 +27,3 @@ for line in ZIPLines:
             allzips.append(zipcode)
         else:
             zipdict[zipcode].append(cityname + ", " + stateabbrv)
-
-
-# write = open(sys.argv[2], "w+")
-#
-# for zips in allzips:
-#     cityState = zipdict[zips]
-#     for place in cityState:
-#         write.write(zips + "\t" + place + "\n")
-#
-# write.write("LOCATION\tBUS ID\n")
-#
-# for line in cityLines:
-#     write.write(line)
-
-# for line in names:
-#     print(line)
