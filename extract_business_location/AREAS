@@ -1,0 +1,44 @@
+/coordinates
+Champaign	40.116420	-88.243383
+Charlotte	35.227087	-80.843127
+Cleveland	41.499320	-81.694361
+Las_Vegas	36.169941	-115.13983
+Madison	43.073052	-89.40123
+Phoenix	33.448377	-112.074037
+Pittsburgh	40.440625	-79.995886
+Montreal	45.501689	-73.567256
+Toronto	43.653226	-79.383184
+Buenos_Aires	-34.603684	-58.381559
+Stuttgart	48.7758	9.1829
+Inverness	57.477772	-4.224721
+Edinburgh	55.953251	-3.188267
+
+/latitude
+Champaign	39.5	41
+Charlotte	34.5	36
+Cleveland	40.9	42
+Las_Vegas	35.5	37
+Madison	42.5	44
+Phoenix	32.5	34.5
+Pittsburgh	40	41
+Montreal	44.5	46.5
+Toronto	43	44.5
+Buenos_Aires	-35	-34
+Stuttgart	48.5	49.5
+Inverness	57	58
+Edinburgh	55.5	56.5
+
+/longitude
+Champaign	-89	-87
+Charlotte	-82	-80
+Cleveland	-83	-80
+Las_Vegas	-117	-114
+Madison	-90	-88.9
+Phoenix	-113	-110
+Pittsburgh	-80.5	-79
+Montreal	-75	-72.5
+Toronto	-80.5	-78.5
+Buenos_Aires	-59	-57
+Stuttgart	8.5	10
+Inverness	-5	-3.5
+Edinburgh	-4	-2

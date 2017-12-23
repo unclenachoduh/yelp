@@ -11,7 +11,8 @@ import re
 
 input_file_loc = sys.argv[1]
 areas_file_loc = sys.argv[2]
-output_dir = sys.argv[3]
+blacklist = sys.argv[3]
+output_dir = sys.argv[4]
 
 if output_dir[-1] != "/":
     output_dir += "/"
@@ -100,8 +101,17 @@ print("\n")
 ## [STRING OF DATA FOR METRO AREA, STRING OF DATA FOR METRO AREA, ...]
 all_strings = [''] * (len(area_names_arr) + 2)
 
+# STRING FOR NULL COORDS
+null_string = ''
+
+# LIST OF BUSINESSES THAT ARE NOT PART OF DATA
+blacklist_arr = []
+
+# STRING FOR BLACKLIST BUSINESSES
+blacklist_string = ''
+
 # STRING FOR SPREADSHEET
-spread = 'BUS_ID\tLONG\tLAT\n'
+spread = ''
 
 # ARRAY FOR SPREADSHEET
 spreads = [''] * (len(area_names_arr) + 2)
@@ -109,6 +119,23 @@ spreads = [''] * (len(area_names_arr) + 2)
 # ARRAY FOR ALL POINTS SPREADSHEET
 all_spreads = [''] * 4
 
+# 0 top right
+# 1 = bottom right
+# 2 Top left
+# 3 bottom left
+
+# -------------------------
+# READ BLACKLIST
+# -------------------------
+
+black_file = open(blacklist)
+black_text = black_file.read()
+black_lines = black_text.split("\n")
+
+for line in black_lines:
+    blacklist_arr.append(line)
+
+# print(blacklist_arr)
 
 # -------------------------
 # READ BUSINESS FILE
@@ -159,7 +186,7 @@ for line in input_lines:
                 else:
                     all_spreads[3] += str(line_lat) + "\t" + str(line_lon) + "\n"
 
-            send_line = line_id + "\n"
+            send_line = line_id + "\t" + str(line_lat) + ", " + str(line_lon) + "\t" + loc + "\n"
 
             one_check = False
             more_check = False
@@ -173,8 +200,8 @@ for line in input_lines:
                     # print("LONGS: ", area_longs[area_count][0], area_longs[area_count][1])
                     if line_lon > area_longs[area_count][0] and line_lon < area_longs[area_count][1]:
                         all_strings[area_count] += send_line
-                        spreads[area_count] += line_id + "\t" + str(line_lon) + "\t" + str(line_lat) + "\n"
-                        spread += line_id + "\t" + str(line_lon) + "\t" + str(line_lat) + "\n"
+                        spreads[area_count] += str(line_lat) + "\t" + str(line_lon) + "\n"
+                        spread += str(line_lat) + "\t" + str(line_lon) + "\n"
                         # print("SUCCESS")
                         if one_check == True:
                             more_check = True
@@ -184,8 +211,10 @@ for line in input_lines:
                 area_count += 1
 
             if one_check == False:
-                all_strings[len(all_strings)-2] += send_line
-
+                if line_id not in blacklist_arr:
+                    all_strings[len(all_strings)-2] += send_line
+                else:
+                    blacklist_string += line_id + "\t" + latparts[1] + ", " + lonparts[1] + "\t" + loc + "\n"
             if more_check == True:
                 all_strings[len(all_strings)-1] += send_line
 
@@ -193,7 +222,7 @@ for line in input_lines:
                 print(send_line, double_saver)
 
         else:
-            all_strings[len(all_strings)-2] += send_line
+            null_string += line_id + "\t" + latparts[1] + ", " + lonparts[1] + "\t" + loc + "\n"
 
 
 # -------------------------
@@ -215,76 +244,73 @@ for line in input_lines:
 # PRINT SHOP
 # --------------------------------------------------
 
-finalfile = open(output_dir + "04_BUSINESSES", "w+")
-
 print_count = 0
 for line in all_strings:
-    name = "03_DUPLICATES"
+    name = "DOUBLE"
     if print_count < len(area_names_arr):
         name = area_names_arr[print_count].upper()
     if print_count == len(area_names_arr):
-        name = "03_OUTLIER"
+        name = "MISSING"
 
     writefile = open(output_dir + name, "w+")
     writefile.write(line)
     writefile.close()
 
-    if name != "03_DUPLICATES" and name != "03_OUTLIER":
-        finalfile.write("\\" + name + "\n" + line + "\n")
-
     # print(name)
 
     print_count += 1
 
-finalfile.close()
+writefile = open(output_dir + "NULL", "w+")
+writefile.write(null_string)
+writefile.close()
 
+writefile = open(output_dir + "BLACKLIST", "w+")
+writefile.write(blacklist_string)
+writefile.close()
 
-writefile = open(output_dir + "02_ACC_GLOB", "w+")
+writefile = open(output_dir + "plotdata", "w+")
 writefile.write(spread)
 writefile.close()
 
 
-writefile = open(output_dir + "02_ACC_US", "w+")
+writefile = open(output_dir + "ACC_plotdataUS", "w+")
 counter = 0
-writefile.write('BUS_ID\tLONG\tLAT\n')
 while counter < 9:
     writefile.write(spreads[counter])
-    # print("USA PLOT: ", counter)
+    print("USA PLOT: ", counter)
     counter += 1
 
 
 writefile.close()
 
 
-writefile = open(output_dir + "02_ACC_BA", "w+")
-writefile.write('BUS_ID\tLONG\tLAT\n')
+writefile = open(output_dir + "ACC_plotdataBA", "w+")
 writefile.write(spreads[counter])
 writefile.close()
-# print("BA PLOT: ", counter)
+print("BA PLOT: ", counter)
 counter += 1
 
-writefile = open(output_dir + "02_ACC_EU", "w+")
-writefile.write('BUS_ID\tLONG\tLAT\n')
+writefile = open(output_dir + "ACC_plotdataEU", "w+")
 while counter < 13:
     writefile.write(spreads[counter])
-    # print("EU PLOT: ", counter)
+    print("USA PLOT: ", counter)
     counter += 1
 
 
 writefile.close()
 
 
-writefile = open(output_dir + "01_QUAD_NE", "w+")
+writefile = open(output_dir + "NE_HEM", "w+")
 writefile.write(all_spreads[0])
 writefile.close()
-writefile = open(output_dir + "01_QUAD_NW", "w+")
+writefile = open(output_dir + "NW_HEM", "w+")
 writefile.write(all_spreads[1])
 writefile.close()
-writefile = open(output_dir + "01_QUAD_SE", "w+")
+writefile = open(output_dir + "SE_HEM", "w+")
 writefile.write(all_spreads[2])
 writefile.close()
-writefile = open(output_dir + "01_QUAD_SW", "w+")
+writefile = open(output_dir + "SW_HEM", "w+")
 writefile.write(all_spreads[3])
 writefile.close()
 
-print("# -------------------------\n  FINISHED\n# -------------------------\n")
+print("\n# -------------------------\n  Yeah, Baby, Yeah!\n# -------------------------\n")
