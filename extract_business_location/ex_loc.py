@@ -230,7 +230,7 @@ for line in all_strings:
     writefile.close()
 
     if name != "03_DUPLICATES" and name != "03_OUTLIER":
-        finalfile.write("\\" + name + "\n" + line + "\n")
+        finalfile.write("/" + name + "\n" + line + "\n")
 
     # print(name)
 

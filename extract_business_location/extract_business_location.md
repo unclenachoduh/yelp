@@ -14,6 +14,8 @@ where `business_jsaon_file`, `areas_file`, and `output_directory` are the locati
 
 To run `ex_loc`, a file defining the areas to be observed must be included. These areas should follow the format of the file `AREAS` and must contain a minimum and maximum value for latitude and longitude of the area. The code for `ex_loc` currently generates additional files based on the major metropolitan areas for the 10th round of the Yelp Dataset Challenge. If a new `AREAS` file is used, the `02_ACC` files will be invalid, but all others will be accurate.
 
+Run time: 1 min 20 seconds
+
 ## Output
 
 | File name | Data | Format |
@@ -22,4 +24,4 @@ To run `ex_loc`, a file defining the areas to be observed must be included. Thes
 | 02\_ACC\_**_xx_** | All data points that have been accepted as part of an area. These files correspond to continents (North America, Europe, South America) | Business ID, Longitude, Latitude |
 | 03\_DUPLICATES | All data points that appear in more than one metropolitan area. | Latitude, Longitude |
 | 03\_OUTLIER | All data points that fall outside of any metropolitan area. | Latitude, Longitude |
-| __*NAME\_OF\_AREA*__ | All data points that fall within the labeled metropolitan area as selected and see in README.md. All data points follow a header with the area name. | Area_name, \n, Latitude, Longitude | 
+| __*NAME\_OF\_AREA*__ | All data points that fall within the labeled metropolitan area as selected and see in README.md. All data points follow a header with the area name. | Area_name, \n, Latitude, Longitude |
