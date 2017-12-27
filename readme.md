@@ -47,3 +47,11 @@ https://www.yelp.com/dataset
 | Stuttgart | 48.7758 | 9.1829 |
 | Inverness | 57.477772 | -4.224721 |
 | Edinburgh | 55.953251 | -3.188267 |
+
+
+## Steps
+
+1. Run `extract_business_location` on `business.json` file from Yelp Dataset/
+2. Run `split_file` on the `review.json` file from the Yelp Dataset (because this file is 4.7 million lines long andthe following steps will not terminate on a file that long)
+3. Run `extract_review_text` on the output of `split_file` from step 2 and use the output of `extract_business_location` from step 1 as the business file.
+4. Run `merge` on the output of `extract_review_text` from step 3.

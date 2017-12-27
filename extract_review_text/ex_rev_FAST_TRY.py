@@ -153,8 +153,7 @@ for filename in source_files:
     count = 0
     for line in input_lines:
         if line != '':
-
-            if count % 500 == 0:
+            if count % 25000 == 0:
                 # num = str(int(count / 250000))
                 print(count, "/", len(input_lines) - 1)
             count += 1
@@ -166,8 +165,6 @@ for filename in source_files:
             text_parts = line_parts[4].split("\":\"")
             text = text_parts[1]
 
-
-            # print(bus_id)
             # print("-----\n" + bus_id + "\n" + text + "\n-----\n")
 
             find = np.searchsorted(ids, bus_id)
@@ -188,11 +185,11 @@ for filename in source_files:
         # print(region_names_arr[count])
         if string != '':
             print("write", region_names_arr[count])
-            writefile = open(output_dir + region_names_arr[count] + "/" + file_num, "w+")
+            writefile = open(output_dir + region_names_arr[count] + "_" + file_num, "w+")
             writefile.write(string)
             writefile.close()
 
-            writefile = open(output_dir + region_names_arr[count] + "/" +  "QA_" + file_num, "w+")
+            writefile = open(output_dir + "QA_" + region_names_arr[count] + "_" + file_num, "w+")
             writefile.write(qa_reviews[count])
             writefile.close()
             # print("STRING", string)

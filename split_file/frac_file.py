@@ -18,17 +18,14 @@ input_text = input_read.readlines()
 
 writeline = ''
 count = 0
+writefile = open(output_dir + output_name + "_tenth", "w+")
 for line in input_text:
     if line != '':
         # if count == 0:
         #     print(line)
-        writeline += line
 
-        if count % 50000 == 0:
-            num = str('{:02}'.format(int(count / 50000)))
-            writefile = open(output_dir + output_name + "_" + num, "w+")
-            writefile.write(writeline)
-            writefile.close()
+        if count % 10 == 0:
+            writefile.write(line)
+        count += 1
 
-            writeline = ''
-    count += 1
+writefile.close()
