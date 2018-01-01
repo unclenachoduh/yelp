@@ -12,7 +12,7 @@ import os
 # ARGUMENTS
 # ------------------
 
-thresh = 100000
+thresh = 200000
 
 source_dir =sys.argv[1]
 targ_dir = sys.argv[2]
@@ -46,9 +46,9 @@ for name in source_files:
                 local_count = 0
                 while count < thresh and local_count < len(text):
                     if count % 10 == 0:
-                        writefile.write(text[local_count])
-                    else:
                         writefile2.write(text[local_count])
+                    else:
+                        writefile.write(text[local_count])
                     local_count += 1
                     count += 1
 
